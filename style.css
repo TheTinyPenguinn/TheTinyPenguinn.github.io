@@ -1,0 +1,870 @@
+/* ==========================================================================
+   style.css: one stylesheet for every page.
+   Sections:
+     1. Tokens: colour, type scale, spacing scale, grid, motion
+     2. Base
+     3. Starfield canvas
+     4. Layout and grid
+     5. Links
+     6. Type roles (display, lede, label, meta)
+     7. Header and footer
+     8. Hero
+     9. Sections
+    10. Work entries
+    11. Writing index
+    12. About and contact
+    13. Posts (long-form)
+    14. 404
+    15. Reveal on scroll
+    16. Page transitions
+    17. Reduced motion
+   ========================================================================== */
+
+
+/* 1. Tokens ---------------------------------------------------------------- */
+
+:root {
+  /* Colour: near-monochrome. The accent only appears on hover, focus and
+     text selection. */
+  --bg: #08080a;                   /* keep in sync with STARFIELD.background */
+  --text: #f5f5f7;                 /* primary: headings, body, links */
+  --text-2: #a1a1a6;               /* secondary: summaries, supporting lines (7.6:1) */
+  --text-3: #7d7d83;               /* labels and meta (4.7:1, still legible in daylight) */
+  --rule: rgba(255, 255, 255, 0.14);
+  --underline: rgba(255, 255, 255, 0.24);
+  --accent: #a9bdff;               /* starlight blue, used sparingly */
+  --accent-soft: rgba(169, 189, 255, 0.28);
+  --code-bg: rgba(255, 255, 255, 0.05);
+
+  /* Hairlines are one device pixel wherever the screen allows it. */
+  --hairline: 1px;
+
+  /* Type */
+  --font-display: -apple-system, "SF Pro Display", BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, "SF Pro Text", BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Type scale. Few sizes, far apart: the jumps are the hierarchy.
+     Each step has its own tracking and leading; see section 6. */
+  --t-label: 0.6875rem;            /* 11px  spaced caps: section labels, nav, footer */
+  --t-meta: 0.8125rem;             /* 13px  dates, context lines, captions */
+  --t-body: 1.0625rem;             /* 17px  body copy */
+  --t-prose: 1.125rem;             /* 18px  long-form body */
+  --t-title: 1.375rem;             /* 22px  entry titles */
+  --t-lede: clamp(1.25rem, 0.9rem + 1.2vw, 1.625rem);     /* 20 to 26px  role line, email */
+  --t-display: clamp(3.5rem, 1rem + 11vw, 9rem);          /* 56 to 144px  the name */
+  --t-post: clamp(2.25rem, 1.2rem + 3.4vw, 3.75rem);      /* 36 to 60px   post titles */
+
+  /* Spacing scale (4px base). Tight inside a group, generous between groups. */
+  --s-1: 0.25rem;                  /*   4 */
+  --s-2: 0.5rem;                   /*   8 */
+  --s-3: 0.75rem;                  /*  12 */
+  --s-4: 1rem;                     /*  16 */
+  --s-5: 1.5rem;                   /*  24 */
+  --s-6: 2rem;                     /*  32 */
+  --s-7: 3rem;                     /*  48 */
+  --s-8: 4rem;                     /*  64 */
+  --s-9: 6rem;                     /*  96 */
+  --s-10: 8rem;                    /* 128 */
+  --section-gap: clamp(6rem, 3rem + 8vw, 10rem);          /*  96 to 160 between sections */
+
+  /* Grid: a label column and a content column. */
+  --gutter: clamp(1.5rem, 0.5rem + 4vw, 3rem);
+  --label-col: 9.5rem;             /* 152px: section labels, dates, margin notes */
+  --content: 40rem;                /* 640px: every text block lives in here */
+  --measure: 34em;                 /* long-form line length: ~65 to 70 characters */
+
+  /* Motion: tune here */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);    /* movement: quick start, long settle */
+  --ease-out-soft: cubic-bezier(0.25, 0.6, 0.3, 1);  /* opacity: no pop at the start */
+  --ease-sweep: cubic-bezier(0.55, 0, 0.1, 1);       /* link underline: gathers, then glides */
+  --ease-draw: cubic-bezier(0.6, 0, 0.2, 1);         /* hairlines: visibly travel, then settle */
+  --reveal-duration: 1000ms;       /* rise; the fade runs at ~65% of this */
+  --reveal-distance: 10px;
+  --reveal-stagger: 70ms;          /* delay between items entering together */
+  --focus-duration: 1200ms;        /* hero "focus pull": blur clears, barely moves */
+  --focus-blur: 8px;
+  --focus-distance: 4px;
+  --focus-stagger: 90ms;
+  --line-duration: 1400ms;         /* section hairlines drawing in */
+  --link-sweep: 520ms;
+  --page-transition: 360ms;
+
+  color-scheme: dark;              /* dark scrollbars and form controls */
+}
+
+@media (min-resolution: 2dppx) {
+  :root { --hairline: 0.5px; }
+}
+
+@media (min-resolution: 3dppx) {
+  :root { --hairline: 0.34px; }
+}
+
+
+/* 2. Base ------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 100%;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  -webkit-tap-highlight-color: transparent; /* no grey flash on tap; :active below instead */
+  scrollbar-color: #26262b var(--bg);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: #26262b;
+  border: 3px solid var(--bg);
+  border-radius: 10px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  font-size: var(--t-body);
+  letter-spacing: -0.006em;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p, li, dd, blockquote, figcaption {
+  text-wrap: pretty;
+}
+
+p, ul, ol, dl, dd, figure { margin: 0; }
+
+ul, ol { padding: 0; list-style: none; }
+
+::selection {
+  background: var(--accent-soft);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Focus rings ease in instead of snapping. */
+a {
+  outline: 1.5px solid transparent;
+  outline-offset: 8px;
+}
+
+img, svg, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* 3. Starfield canvas ------------------------------------------------------ */
+
+/* Two layers, both drawn by main.js: an opaque backdrop (nebula wash,
+   vignette) that is rendered once per resize, and the stars above it. */
+.sky,
+.sky-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;                  /* stable while mobile toolbars show/hide */
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;                      /* main.js fades them in */
+}
+
+.sky-backdrop {
+  will-change: transform;          /* moved on the compositor for parallax */
+}
+
+
+/* 4. Layout and grid ------------------------------------------------------- */
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: calc(var(--label-col) + var(--content) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: max(var(--s-7), env(safe-area-inset-bottom));
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+
+/* Label in the left column, content in the right. One column on phones. */
+.grid {
+  display: grid;
+  grid-template-columns: var(--label-col) minmax(0, var(--content));
+  align-items: baseline;
+}
+
+.grid > .col-label { grid-column: 1; }
+.grid > .col-content { grid-column: 2; }
+
+@media (max-width: 52rem) {
+  .grid { display: block; }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* 5. Links ----------------------------------------------------------------- */
+/* Dim resting underline. On hover an accent line sweeps in from the left;
+   on leave it carries on and exits to the right. The two layers are
+   solid-colour lines drawn with background-image, not decorative gradients. */
+
+a {
+  color: inherit;
+  text-decoration: none;
+  background-image:
+    linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--underline), var(--underline));
+  background-size: 0% 1px, 100% 1px;
+  background-position: right bottom, left bottom;
+  background-repeat: no-repeat;
+  padding-bottom: 0.12em;
+  transition: background-size var(--link-sweep) var(--ease-sweep),
+    color var(--link-sweep) var(--ease-sweep),
+    opacity 320ms var(--ease-out-soft),
+    outline-color 260ms var(--ease-out-soft),
+    outline-offset 360ms var(--ease-out-expo);
+}
+
+a:hover,
+a:focus-visible {
+  background-size: 100% 1px, 100% 1px;
+  background-position: left bottom, left bottom;
+}
+
+/* Press feedback: dims instantly, recovers softly. */
+a:active {
+  opacity: 0.6;
+  transition-duration: var(--link-sweep), var(--link-sweep), 0s, 260ms, 360ms;
+}
+
+/* Links with no resting underline: nav, wordmark, index rows. */
+a.quiet {
+  background-size: 0% 1px, 0% 1px;
+}
+a.quiet:hover,
+a.quiet:focus-visible {
+  background-size: 100% 1px, 0% 1px;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 0.3em;
+  color: var(--text-3);
+  transition: transform var(--link-sweep) var(--ease-out-expo),
+    color var(--link-sweep) var(--ease-sweep);
+}
+a:hover .arrow,
+a:focus-visible .arrow {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+
+/* 6. Type roles ------------------------------------------------------------ */
+/* Tracking tightens as size grows; leading loosens as size shrinks. */
+
+.display {
+  font-size: var(--t-display);
+  font-weight: 580;                /* variable SF on Apple; rounds to 600 elsewhere */
+  line-height: 0.92;
+  letter-spacing: -0.052em;
+  word-spacing: -0.02em;
+  margin-left: -0.055em;           /* optical: the P's stem sits on the left edge */
+}
+
+.lede {
+  font-family: var(--font-display);
+  font-size: var(--t-lede);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.022em;
+  color: var(--text);
+}
+
+.label {
+  font-family: var(--font-text);
+  font-size: var(--t-label);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.meta {
+  font-size: var(--t-meta);
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* 7. Header and footer ----------------------------------------------------- */
+
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-6) 0;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.site-nav {
+  display: flex;
+  gap: var(--s-6);
+  margin-left: auto;
+}
+
+.site-nav a { color: var(--text-2); }
+.site-nav a:hover,
+.site-nav a:focus-visible { color: var(--text); }
+
+/* The home page is one short scroll on a phone: no nav needed there. */
+@media (max-width: 40rem) {
+  .site-header--home { display: none; }
+}
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-top: var(--section-gap);
+  padding-top: var(--s-5);
+  border-top: var(--hairline) solid var(--rule);
+}
+
+
+/* 8. Hero ------------------------------------------------------------------ */
+
+.hero {
+  padding: clamp(7rem, 24vh, 13rem) 0 var(--section-gap);
+}
+
+.hero-lines {
+  margin-top: var(--s-6);
+  max-width: var(--content);
+}
+
+.hero .lede { text-wrap: balance; }
+
+.hero .context {
+  margin-top: var(--s-3);
+  color: var(--text-2);
+  max-width: 36ch;
+  text-wrap: balance;
+}
+
+/* Wide enough for each sentence on its own line: break at the full stop. */
+@media (min-width: 40rem) {
+  .hero .context { max-width: none; }
+  .hero .context span { display: block; }
+}
+
+@media (max-width: 40rem) {
+  .hero { padding-top: clamp(7rem, 26vh, 11rem); }
+}
+
+
+/* 9. Sections -------------------------------------------------------------- */
+
+.section {
+  position: relative;
+  padding: var(--s-6) 0 0;
+  margin-bottom: var(--section-gap);
+  scroll-margin-top: var(--s-6);
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--hairline);
+  background: var(--rule);
+  transform-origin: left center;
+}
+
+.section > .label {
+  padding-top: 0.15em;             /* optical: caps sit on the title's baseline */
+}
+
+@media (max-width: 52rem) {
+  .section > .label { margin-bottom: var(--s-6); }
+}
+
+
+/* 10. Work entries --------------------------------------------------------- */
+
+.entries > * + * { margin-top: var(--s-10); }
+
+.entry-title {
+  font-size: var(--t-title);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.entry-meta { margin-top: var(--s-1); }
+
+.entry-summary {
+  margin-top: var(--s-4);
+  color: var(--text);
+  max-width: 36em;
+}
+
+/* Label / value rows: labels hang in a narrow column on the value's baseline. */
+.entry-points {
+  margin-top: var(--s-5);
+  display: grid;
+  gap: var(--s-3);
+}
+
+.entry-points > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  align-items: baseline;
+}
+
+.entry-points dt { /* uses .label */ }
+
+.entry-points dd { color: var(--text-2); }
+
+@media (max-width: 34rem) {
+  .entry-points { gap: var(--s-4); }
+  .entry-points > div { display: block; }
+  .entry-points dd { margin-top: var(--s-1); }
+}
+
+.entry-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-6);
+  margin-top: var(--s-5);
+  font-size: 0.9375rem;
+}
+
+/* Photos: modest, unframed, with room around them. */
+.entry-figure {
+  margin-top: var(--s-6);
+}
+
+.entry-figure .photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+
+.entry-figure img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 2px;
+  outline: var(--hairline) solid rgba(255, 255, 255, 0.12);
+  outline-offset: calc(-1 * var(--hairline));
+  filter: saturate(0.82) brightness(0.9); /* sits into the monochrome page */
+  background: #141417;             /* holds the space while the photo loads */
+}
+
+.entry-figure figcaption {
+  margin-top: var(--s-3);
+}
+
+
+
+/* 11. Writing index -------------------------------------------------------- */
+
+.index-row {
+  position: relative;
+  padding: var(--s-5) 0;
+  border-top: var(--hairline) solid var(--rule);
+}
+
+.index-row:first-child { border-top: 0; padding-top: 0; }
+
+.index-title {
+  font-size: var(--t-title);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* The whole row is the tap target. */
+.index-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.index-row:hover .index-title a {
+  background-size: 100% 1px, 100% 1px;
+  background-position: left bottom, left bottom;
+}
+
+.index-row time {
+  display: block;
+  margin-top: var(--s-1);
+}
+
+.index-summary {
+  margin-top: var(--s-3);
+  color: var(--text-2);
+  max-width: 36em;
+}
+
+
+/* 12. About and contact ---------------------------------------------------- */
+
+.about-text {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  max-width: 34em;
+}
+
+.contact-email {
+  font-family: var(--font-display);
+  font-size: var(--t-lede);
+  font-weight: 500;
+  letter-spacing: -0.022em;
+}
+
+.contact-links {
+  display: flex;
+  gap: var(--s-6);
+  margin-top: var(--s-5);
+  font-size: 0.9375rem;
+}
+
+
+/* 13. Posts (long-form) ---------------------------------------------------- */
+
+.post {
+  padding-top: clamp(4rem, 14vh, 8rem);
+}
+
+.post-head { row-gap: var(--s-5); }
+
+.post-meta .dot { margin: 0 0.45em; }
+
+/* In the margin column on wide screens: date above reading time. */
+@media (min-width: 52.01rem) {
+  .post-meta time,
+  .post-meta [data-reading-time] { display: block; }
+  .post-meta .dot { display: none !important; }
+}
+
+.post-title {
+  font-size: var(--t-post);
+  line-height: 1.02;
+  letter-spacing: -0.038em;
+}
+
+@media (max-width: 52rem) {
+  .post-meta { margin-bottom: var(--s-5); }
+}
+
+.post-body {
+  margin-top: clamp(var(--s-8), 8vw, var(--s-9));
+}
+
+.prose {
+  max-width: var(--measure);
+  font-size: var(--t-prose);
+  line-height: 1.7;
+  letter-spacing: -0.009em;
+  hanging-punctuation: first allow-end last;
+}
+
+.prose > * + * { margin-top: 1.35em; }
+
+.prose h2 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.024em;
+  margin-top: 2.8em;
+}
+
+.prose h3 {
+  font-size: 1.1875rem;
+  letter-spacing: -0.015em;
+  margin-top: 2.2em;
+}
+
+.prose h2 + *,
+.prose h3 + * { margin-top: 0.8em; }
+
+@media (max-width: 34rem) {
+  .prose {
+    font-size: var(--t-body);
+    line-height: 1.68;
+  }
+  .prose h2 {
+    font-size: 1.3125rem;
+    margin-top: 2.4em;
+  }
+}
+
+.prose strong { font-weight: 600; }
+
+.prose ul,
+.prose ol { padding-left: 1.2em; }
+
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+
+.prose li + li { margin-top: 0.55em; }
+
+.prose li::marker { color: var(--text-3); }
+
+.prose blockquote {
+  margin: 2.2em 0;
+  padding-left: 1.25em;
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  font-family: var(--font-display);
+  font-size: 1.125em;
+  line-height: 1.55;
+  letter-spacing: -0.014em;
+  color: var(--text);
+}
+
+.prose blockquote + * { margin-top: 2.2em; }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--code-bg);
+  padding: 0.12em 0.35em;
+  border-radius: 4px;
+}
+
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  background: var(--code-bg);
+  border: var(--hairline) solid var(--rule);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose figcaption {
+  margin-top: var(--s-3);
+  font-size: var(--t-meta);
+  color: var(--text-3);
+}
+
+.prose hr {
+  border: 0;
+  border-top: var(--hairline) solid var(--rule);
+  margin: 3em 0;
+}
+
+.post-footer {
+  margin-top: var(--s-9);
+  padding-top: var(--s-5);
+  border-top: var(--hairline) solid var(--rule);
+}
+
+
+/* 14. 404 ------------------------------------------------------------------ */
+
+.not-found {
+  padding: clamp(8rem, 30vh, 16rem) 0 var(--s-9);
+}
+
+.not-found p {
+  margin-top: var(--s-5);
+  color: var(--text-2);
+}
+
+.not-found p + p { margin-top: var(--s-6); color: var(--text); }
+
+
+/* 15. Reveal on scroll ----------------------------------------------------- */
+/* Only hidden when JS is running and motion is allowed; see main.js.
+   Three voices, so the page doesn't just "rise" everywhere:
+     rise   list items and cards: the fade finishes early, the rise settles late
+     focus  hero and post titles: the text comes into focus with almost no movement
+     fade   section labels: opacity only, while their hairline draws in */
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    --reveal-delay: calc(var(--intro-delay, 0ms) + var(--reveal-i, 0) * var(--reveal-stagger));
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+    will-change: opacity, transform;
+    transition:
+      opacity calc(var(--reveal-duration) * 0.65) var(--ease-out-soft) var(--reveal-delay),
+      transform var(--reveal-duration) var(--ease-out-expo) var(--reveal-delay);
+  }
+
+  .js [data-reveal="focus"] {
+    --reveal-delay: calc(var(--intro-delay, 0ms) + var(--reveal-i, 0) * var(--focus-stagger));
+    transform: translate3d(0, var(--focus-distance), 0);
+    filter: blur(var(--focus-blur));
+    will-change: opacity, transform, filter;
+    transition:
+      opacity calc(var(--focus-duration) * 0.7) var(--ease-out-soft) var(--reveal-delay),
+      filter var(--focus-duration) var(--ease-out-expo) var(--reveal-delay),
+      transform var(--focus-duration) var(--ease-out-expo) var(--reveal-delay);
+  }
+
+  .js [data-reveal="fade"] {
+    transform: none;
+    filter: none;
+    will-change: opacity;
+    transition: opacity calc(var(--reveal-duration) * 0.8) var(--ease-out-soft) var(--reveal-delay);
+  }
+
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+
+  .js [data-reveal].is-done {
+    will-change: auto;
+    filter: none;
+  }
+
+  /* Arrived during a fast scroll: a short fade, no travel, no wait. */
+  .js [data-reveal].is-quick {
+    transform: none;
+    filter: none;
+    transition: opacity 260ms var(--ease-out-soft);
+  }
+
+  /* Already scrolled past: just be there. */
+  .js [data-reveal].is-instant {
+    transition: none;
+  }
+
+  /* Section hairlines draw in from the left. */
+  .js .section::before {
+    transform: scaleX(0);
+    transition: transform var(--line-duration) var(--ease-draw);
+  }
+
+  .js .section.is-drawn::before {
+    transform: none;
+  }
+}
+
+
+/* 16. Page transitions ----------------------------------------------------- */
+/* Cross-document View Transitions; other browsers navigate normally.
+   The old page stays put and the new one dissolves in over it. Both skies
+   are in the same place at that moment, so the stars never dip or double;
+   only the words change. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: vt-dissolve var(--page-transition) var(--ease-out-soft) both;
+  mix-blend-mode: normal;
+}
+
+@keyframes vt-dissolve {
+  from { opacity: 0; }
+}
+
+
+/* 17. Reduced motion ------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Images inside posts: full column width, quiet frame, toned to the page. */
+.prose figure { margin: 2.2em 0; }
+.prose figure:first-child { margin-top: 0; }
+.prose figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  outline: var(--hairline) solid rgba(255, 255, 255, 0.12);
+  outline-offset: calc(-1 * var(--hairline));
+  filter: saturate(0.82) brightness(0.9);
+  background: #141417;
+}
+.prose figure + * { margin-top: 2.2em; }
+
+/* Small italic note under a post's lead image (disclaimers, context). */
+.prose .post-note {
+  font-size: var(--t-meta);
+  font-style: italic;
+  color: var(--text-3);
+}

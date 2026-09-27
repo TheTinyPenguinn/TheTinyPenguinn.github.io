@@ -1,0 +1,642 @@
+/* 
+   game.css: Mate in Three. The site's style.css is not loaded here; its
+   tokens, header, footer, links and page transition are repeated below so
+   the two pages match. If you change a token in style.css, change it here.
+
+   Sections:
+     1. Tokens
+     2. Base
+     3. Starfield canvas
+     4. Layout & header
+     5. Title and rule
+     6. Board
+     7. Buttons
+     8. Level picker
+     9. Help & footer
+    10. Wide screens
+    11. Page transition
+    12. Reduced motion
+    */
+
+/* 1. Tokens */
+
+:root {
+  --bg: #08080a;
+  --text: #f5f5f7;
+  --text-muted: #a1a1a6;           /* the site's --text-2 */
+  --text-faint: #7d7d83;           /* the site's --text-3 */
+  --rule: rgba(255, 255, 255, 0.14);
+  --rule-strong: rgba(255, 255, 255, 0.26);
+  --underline: rgba(255, 255, 255, 0.24);
+  --accent: #a9bdff;
+  --accent-soft: rgba(169, 189, 255, 0.28);
+  --hairline: 1px;
+
+  --font-display: -apple-system, "SF Pro Display", BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, "SF Pro Text", BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --column: 560px;
+  --gutter: clamp(1.5rem, 0.5rem + 4vw, 3rem);
+  --t-label: 0.6875rem;
+  --t-meta: 0.8125rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.25, 0.6, 0.3, 1);
+  --ease-sweep: cubic-bezier(0.55, 0, 0.1, 1);
+  --fade: 450ms;
+  --link-sweep: 520ms;
+  --page-transition: 360ms;
+
+  color-scheme: dark;
+}
+
+@media (min-resolution: 2dppx) { :root { --hairline: 0.5px; } }
+@media (min-resolution: 3dppx) { :root { --hairline: 0.34px; } }
+
+/* 2. Base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Flex and grid layouts otherwise win against the hidden attribute. */
+[hidden] { display: none !important; }
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-color: #26262b var(--bg);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: #26262b;
+  border: 3px solid var(--bg);
+  border-radius: 10px;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  font-size: 1.0625rem;
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+::selection {
+  background: var(--accent-soft);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+b { font-weight: 600; color: #fff; }
+
+/* 3. Starfield canvas */
+
+/* Drawn by the site's main.js: a backdrop canvas it creates, stars above. */
+.sky,
+.sky-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;                      /* main.js fades them in */
+}
+
+.sky-backdrop { will-change: transform; }
+
+/* 4. Layout & header */
+
+.page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+
+/* Header, labels and links: the same as the site's. */
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.label {
+  font-size: var(--t-label);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.meta {
+  font-size: var(--t-meta);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.site-nav a { color: var(--text-muted); }
+.site-nav a:hover,
+.site-nav a:focus-visible { color: var(--text); }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  background-image:
+    linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--underline), var(--underline));
+  background-size: 0% 1px, 100% 1px;
+  background-position: right bottom, left bottom;
+  background-repeat: no-repeat;
+  padding-bottom: 0.12em;
+  transition: background-size var(--link-sweep) var(--ease-sweep),
+    color var(--link-sweep) var(--ease-sweep),
+    opacity 320ms var(--ease-out-soft);
+}
+
+a:hover,
+a:focus-visible {
+  background-size: 100% 1px, 100% 1px;
+  background-position: left bottom, left bottom;
+}
+
+a:active { opacity: 0.6; transition-duration: var(--link-sweep), var(--link-sweep), 0s; }
+
+a.quiet { background-size: 0% 1px, 0% 1px; }
+a.quiet:hover,
+a.quiet:focus-visible { background-size: 100% 1px, 0% 1px; }
+
+.game {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.875rem, 2.4vh, 1.75rem);
+  padding: clamp(1.25rem, 3.5vh, 3rem) 0 2rem;
+}
+
+/* 5. Title and rule */
+
+.title {
+  font-size: clamp(2.25rem, 1.2rem + 3.4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.038em;
+  text-wrap: balance;
+}
+
+.rule {
+  color: var(--text-muted);
+  font-size: 1rem;
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+
+/* 6. Board */
+
+.board-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.board-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.level-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text);
+}
+
+.level-name .of { color: var(--text-faint); }
+
+.tally {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.board-frame {
+  display: flex;
+  justify-content: center;
+}
+
+#board {
+  display: block;
+  width: min(100%, 520px);
+  width: min(100%, 520px, 58svh);    /* also fits a short window */
+  aspect-ratio: 1;
+  touch-action: none;                /* dragging draws, it doesn't scroll */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#board:focus-visible { outline-offset: 6px; }
+
+/* Touching or clicking the board focuses it so the keyboard works, but a ring
+   around the whole board would be noise. game.js lifts this class the moment
+   a key is pressed. */
+#board.quiet-focus:focus-visible { outline: none; }
+
+.board-status {
+  min-height: 2.2em;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  text-align: center;
+  text-wrap: pretty;
+  transition: color var(--fade) var(--ease-out-expo);
+}
+
+.board-status[data-tone="solved"] {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.board-status[data-tone="nudge"] { color: var(--text); }
+
+/* The line, shown when someone gives up or runs out of moves. */
+.line-out {
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+  text-align: center;
+  padding-top: 0.25rem;
+}
+
+/* Promotion: four glyphs, thumb-sized. */
+.promotion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.875rem;
+}
+
+.promotion-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.promotion-choices {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.promotion-choices button {
+  min-width: 3rem;
+  min-height: 3rem;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text);
+  border-color: var(--rule-strong);
+}
+
+.promotion-choices button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* 7. Buttons */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Below about 360px four buttons do not fit one row: two even rows instead. */
+@media (max-width: 22.5rem) {
+  .controls {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+button {
+  font: inherit;
+  font-size: 0.9375rem;
+  font-family: var(--font-text);
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  min-height: 2.75rem;               /* comfortable thumb target */
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--fade) var(--ease-out-expo),
+    border-color var(--fade) var(--ease-out-expo);
+}
+
+button:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--rule-strong);
+}
+
+button:disabled {
+  color: var(--text-faint);
+  opacity: 0.45;
+  cursor: default;
+}
+
+button.primary {
+  color: var(--text);
+  border-color: var(--rule-strong);
+}
+
+button.primary:hover:not(:disabled) { border-color: var(--text-muted); }
+
+/* Difficulty: three quiet options, the chosen one filled in. */
+
+.tiers {
+  display: flex;
+  gap: 0.375rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.25rem;
+  width: fit-content;
+}
+
+.tiers button {
+  border-color: transparent;
+  min-height: 2.125rem;
+  padding: 0.35rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+.tiers button[aria-pressed="true"] {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--rule-strong);
+}
+
+
+/* 8. Level picker */
+
+.levels ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.levels button {
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  border-color: transparent;
+  color: var(--text-faint);
+}
+
+.levels button[data-state="solved"] {
+  color: var(--accent);
+  border-color: var(--accent-soft);
+}
+
+.levels button[data-state="open"] {
+  color: var(--text-muted);
+  border-color: var(--rule);
+}
+
+.levels button[aria-current="true"] {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--rule-strong);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 9. Help & footer */
+
+.help {
+  font-size: 0.9375rem;
+  border-top: var(--hairline) solid var(--rule);
+  padding-top: 1.25rem;
+}
+
+.help summary {
+  color: var(--text-muted);
+  cursor: pointer;
+  width: fit-content;
+}
+
+.help summary:hover { color: var(--text); }
+
+.help-body { padding-top: 1rem; }
+
+.help dl { margin: 0; }
+
+.help dt {
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.help dd + dt { margin-top: 1.25rem; }
+.help dt + dd { margin-top: 0.375rem; }
+
+.help dd {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+kbd {
+  font-family: inherit;
+  font-size: 0.875em;
+  color: var(--text);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.05em 0.35em;
+}
+
+.help-note {
+  margin-top: 1.25rem;
+  color: var(--text-faint);
+  font-size: 0.8125rem;
+}
+
+.site-footer {
+  padding-top: 1.5rem;
+  border-top: var(--hairline) solid var(--rule);
+}
+
+.site-footer p { max-width: 52ch; }
+
+/* Phones: the board and all four controls fit on the first screen, so a
+   visitor can play without scrolling. Header, title block and gaps tighten;
+   the controls go back to one row when they fit (wider than about 360px). */
+@media (max-width: 30rem) {
+  .site-header { padding: 1rem 0; }
+
+  .game {
+    gap: 0.75rem;
+    padding-top: 0.25rem;
+  }
+
+  .title { font-size: 2rem; }
+
+  .rule {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .board-status {
+    min-height: 1.5em;
+    font-size: 0.875rem;
+  }
+
+  /* Short screens (Safari with its toolbars showing): the board gives up
+     width before the controls fall off the screen. 23rem is everything else
+     on the first screen. */
+  #board { width: min(100%, calc(100svh - 23rem)); min-width: 16rem; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3125rem;
+  }
+
+  .controls button {
+    flex: 1 1 auto;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* 10. Wide screens
+   Words on the left, board on the right, so the whole game fits a laptop
+   window without scrolling. */
+
+@media (min-width: 960px) {
+  :root { --column: 49.5rem; }     /* the site's label column + content column */
+
+  .game {
+    display: grid;
+    grid-template-columns: minmax(16rem, 1fr) min(440px, 56svh);
+    grid-template-areas:
+      "title  board"
+      "rule   board"
+      "levels board"
+      "help   board";
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: clamp(2.5rem, 5vw, 4rem);
+    row-gap: 1.75rem;
+    align-items: start;
+  }
+
+  .title { grid-area: title; font-size: 2.5rem; }
+  .rule { grid-area: rule; }
+  .board-wrap { grid-area: board; }
+  .levels { grid-area: levels; }
+  .help { grid-area: help; }
+
+  #board { width: 100%; }
+
+  .controls,
+  .levels ul { justify-content: flex-start; }
+
+  .help { border-top: none; padding-top: 0; }
+}
+
+/* 11. Page transition: the site's dissolve, so site and game feel like one
+   place. Both pages must opt in for it to run. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: vt-dissolve var(--page-transition) var(--ease-out-soft) both;
+  mix-blend-mode: normal;
+}
+
+@keyframes vt-dissolve {
+  from { opacity: 0; }
+}
+
+/* 12. Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

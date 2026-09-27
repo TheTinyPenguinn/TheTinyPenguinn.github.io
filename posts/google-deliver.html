@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Google Maps Is Behind Every Food Order I Place. So Why Doesn’t Google Deliver? · Pranay G</title>
+  <meta name="description" content="If the food apps lean this heavily on Google Maps, why doesn’t Google just build delivery itself? Writing it out changed my mind.">
+  <meta name="theme-color" content="#08080a">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Google Maps Is Behind Every Food Order I Place. So Why Doesn’t Google Deliver?">
+  <meta property="og:description" content="If the food apps lean this heavily on Google Maps, why doesn’t Google just build delivery itself? Writing it out changed my mind.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308080a'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ffffff' fill-opacity='.12'/%3E%3Ccircle cx='16' cy='16' r='3.2' fill='%23f5f5f7'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../style.css">
+  <script>document.documentElement.classList.add("js");addEventListener("load",function(){if(!window.__siteReady)document.documentElement.classList.remove("js")});</script>
+  <script src="../main.js" defer blocking="render"></script>
+</head>
+<body data-sky="quiet">
+  <canvas class="sky" aria-hidden="true"></canvas>
+
+  <div class="page">
+    <header class="site-header">
+      <a class="wordmark quiet" href="../">Pranay G</a>
+      <nav class="site-nav label" aria-label="Back">
+        <a class="quiet" href="../#thoughts">Thoughts</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="post">
+        <header class="post-head grid">
+          <p class="post-meta meta col-label" data-reveal="focus">
+            <time datetime="2026-08-30">30 Aug 2026</time><span class="dot" aria-hidden="true" data-reading-time-sep hidden>·</span><span data-reading-time hidden></span>
+          </p>
+          <h1 class="post-title col-content" data-reveal="focus">Google Maps Is Behind Every Food Order I Place. So Why Doesn’t Google Deliver?</h1>
+        </header>
+
+        <div class="post-body grid">
+          <div class="prose col-content" data-reveal="fade">
+            <figure>
+              <img src="../media/swiggy-riders.webp" width="800" height="450" alt="Two Swiggy delivery riders in orange uniforms on motorbikes, riding down a busy street lined with small shops." loading="eager" decoding="async">
+            </figure>
+
+            <p class="post-note">Views are my own. Everything here is based on publicly available information and says nothing about Google’s plans or internal thinking.</p>
+
+            <p>I’ve lived in Bangalore for a little over a year now, and two apps have quietly become part of my daily routine: one to order food, one to book a cab. Some weeks I think I talk to delivery partners more than I talk to my neighbours.</p>
+
+            <p>A few months ago I was watching my biryani crawl across the screen, the little bike icon turning at every junction, and something clicked. That map looked awfully familiar. And it isn’t just a feeling. Swiggy has <a href="https://cloud.google.com/blog/topics/inside-google-cloud/special-delivery-google-maps-apis" rel="noopener">publicly described using Google’s Maps APIs</a> to decide which restaurants to show you and to route riders to your door.</p>
+
+            <p>I’m an engineer at Google, and business strategy is not my day job. But the question stuck with me. If these apps lean this heavily on Maps, and Google already knows every restaurant, every road, and roughly how long it takes to get anywhere, why doesn’t Google just build food delivery itself?</p>
+
+
+            <h2>The obvious case for yes</h2>
+
+            <p>On paper it looks almost unfair. Google has restaurant listings with photos, menus, and reviews. It has live traffic. It has Google Pay, which a huge chunk of India already uses. It has Search, which is where a lot of people start when they’re hungry and don’t know what they want. Stitch those together and you have discovery, routing, and payments in one place. The delivery apps are essentially renting pieces of this.</p>
+
+            <p>So my first instinct was simple. Google owns the rails, why not own the train too?</p>
+
+
+            <h2>What the rails actually give you</h2>
+
+            <p>The more I thought about it, the more I realised I was overrating the map.</p>
+
+            <p>Maps gives you geocoding (turning an address into a point), routing, and ETAs. These are hard problems, and Google does them well. But for a delivery company they are inputs, paid for per API call, a bit like electricity. Important, yes, but nobody wins food delivery because they have better electricity.</p>
+
+            <p>And the rails are less sticky than they look. In July 2024, <a href="https://entrackr.com/2024/07/google-maps-cuts-prices-by-70-for-developers-after-ola-maps-free-offering" rel="noopener">Ola moved completely off Google Maps</a> to its own Ola Maps, and Bhavish Aggarwal said it would save the company about ₹100 crore a year. Days later, Google announced India pricing up to 70% lower on most Maps APIs. Google <a href="https://stratnewsglobal.com/trade-tech/ola-vs-google-tech-giants-clash-with-ola-exiting-google-maps-and-offering-its-own/" rel="noopener">said this was something partners had been asking for</a>, not a response to Ola. Either way, the cab app on my phone had already shown that a big enough customer can build its own map.</p>
+
+            <p>What actually decides who wins is everything that happens off the map.</p>
+
+
+            <h2>The stuff Maps can’t touch</h2>
+
+            <p>Start with restaurants. Someone has to sign up thousands of them, onboard their menus, update prices every week, handle the owner who calls angry because an order got cancelled, and negotiate commissions. That’s a sales and operations army, city by city, lane by lane.</p>
+
+            <p>Then there are riders. Delivery is a density game. You need enough riders in every pocket of the city at 1pm and 9pm so food arrives hot, but not so many that they sit idle at 4pm. That means recruiting, incentives, insurance, payouts, and a lot of messy human management. None of it is a software problem you solve once.</p>
+
+            <p>And the customer isn’t easy to move either. Once someone has a food app on their home screen with saved addresses, a membership, and years of order history, switching is real friction. Being the map underneath doesn’t make you the app they open.</p>
+
+            <p>So Maps gives Google a head start on maybe one of the hard problems. The rest are exactly the kind of work Google has historically not loved doing.</p>
+
+
+            <h2>Google has already tried</h2>
+
+            <p>This surprised me. Google has actually been here before.</p>
+
+            <p>In April 2017, Google quietly launched <a href="https://archive.factordaily.com/news/google-areo-food-delivery-india/" rel="noopener">an app called Areo</a> in Bangalore and Mumbai for food delivery and home services. You ordered through the app, Google passed the request to the partner, and the partner took over from there. In other words, Google tried to be the front door without owning any of the hard parts. It never went anywhere, and I think I understand why. If you only own the front door, people have no reason to walk in through yours. And when the food shows up late or cold, the front door takes the blame without any of the levers to fix it.</p>
+
+            <p>The other route was investing. Dunzo, the Bangalore errands app, was the first Indian startup Google invested in directly, back in 2017, taking roughly a fifth of the company. Dunzo became a household verb here (“just Dunzo it”), then got pulled into the quick commerce race, lost money on order after order, and <a href="https://restofworld.org/2025/dunzo-shutdown-india-quick-commerce/" rel="noopener">shut down in January 2025</a>.</p>
+
+            <p>So Google tried building a thin version and backing a thick one. Neither worked.</p>
+
+
+            <h2>Different businesses, different margins</h2>
+
+            <p>The way I now think about it: Google is very good at businesses where one more user costs almost nothing. Search, Maps, Android. Build it once, serve a billion people.</p>
+
+            <p>Food delivery is the opposite. Every extra order needs a real person on a real bike in real traffic. Margins are thin, competition is brutal, and the winners in India spent the better part of a decade burning cash before getting close to profitable. For Google, entering means trading a high margin infrastructure position for a low margin operations war against players with a ten year head start.</p>
+
+            <p>There’s also a quieter reason. Today the delivery apps are Maps customers. The moment Google competes with them, they have every reason to do what Ola did and build their own. Google would risk a steady relationship with the whole industry to fight for one slice of it.</p>
+
+
+            <h2>So should Google do it?</h2>
+
+            <p>My take: no, at least not the way the question is usually framed.</p>
+
+            <p>Being the layer everyone depends on is not the same as being able to replace them. Google Maps is closer to the road network than to the restaurant. Roads are incredibly valuable, but it would be a strange decision for the road to start cooking biryani.</p>
+
+            <p>The version that makes sense to me is the lighter one. Help people discover a place, show reliable ETAs, and hand them off to whichever delivery app they already use.</p>
+
+            <p>Then I found out Google <a href="https://www.medianama.com/2016/08/223-google-search-zomato/" rel="noopener">launched exactly that in India back in 2016</a>. Search for a nearby restaurant on your phone, tap “Place an order”, pick Zomato or Swiggy, and finish on their site. What I find most interesting is that Areo came a year after that. So Google already had the light version and still took a shot at going deeper. The pull to own more of the transaction is real, even for Google, and it still didn’t work.</p>
+
+            <p>I started writing this thinking the answer was obviously yes. I don’t anymore.</p>
+
+            <p>If you’ve worked in delivery or logistics and think I’ve got this wrong, <a href="../#contact">tell me</a>.</p>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="post-footer grid">
+      <p class="col-content"><a href="../">← Back home</a></p>
+    </footer>
+  </div>
+</body>
+</html>
