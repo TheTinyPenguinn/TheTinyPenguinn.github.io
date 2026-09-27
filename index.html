@@ -3,60 +3,128 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Pranay G</title>
+  <title>Pranay G · Design Verification Engineer at Google Pixel</title>
   <meta name="description" content="Pranay G, design verification engineer at Google Pixel. WealthOS, a patient monitor for rural clinics, and thoughts on AI and work.">
   <meta name="theme-color" content="#08080a">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pranay G">
   <meta property="og:description" content="Pranay G, design verification engineer at Google Pixel. WealthOS, a patient monitor for rural clinics, and thoughts on AI and work.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308080a'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ffffff' fill-opacity='.12'/%3E%3Ccircle cx='16' cy='16' r='3.2' fill='%23f5f5f7'/%3E%3C/svg%3E">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pranay G",
+    "url": "https://thetinypenguinn.github.io/",
+    "jobTitle": "Design Verification Engineer",
+    "worksFor": { "@type": "Organization", "name": "Google" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "BITS Pilani, Hyderabad Campus" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Bengaluru", "addressCountry": "IN" },
+    "sameAs": ["https://www.linkedin.com/in/pranay-g-891801244/"]
+  }
+  </script>
   <link rel="stylesheet" href="style.css">
   <script>document.documentElement.classList.add("js");addEventListener("load",function(){if(!window.__siteReady)document.documentElement.classList.remove("js")});</script>
   <script src="main.js" defer blocking="render"></script>
 </head>
-<body>
+<body class="home">
   <canvas class="sky" aria-hidden="true"></canvas>
 
   <div class="page">
-    <header class="site-header site-header--home">
+    <header class="site-header site-header--home" data-header>
+      <a class="wordmark quiet" href="#top">Pranay G</a>
       <nav class="site-nav label" aria-label="Sections">
-        <a class="quiet" href="#work">Work</a>
         <a class="quiet" href="#thoughts">Thoughts</a>
+        <a class="quiet" href="#research">Research</a>
         <a class="quiet" href="#contact">Contact</a>
       </nav>
     </header>
 
-    <main>
+    <main id="top">
       <!-- Hero -->
       <section class="hero" aria-labelledby="name">
         <h1 class="display" id="name" data-reveal="focus">Pranay G</h1>
         <div class="hero-lines">
-          <p class="lede" data-reveal="focus">Design verification engineer at Google Pixel.</p>
-          <p class="context" data-reveal="focus"><span>Based in Bengaluru.</span> <span>I build products on the side and share my thoughts on AI and work.</span></p>
+          <div class="hero-main">
+            <p class="lede" data-reveal="focus">Design verification engineer at Google Pixel.</p>
+            <p class="context" data-reveal="focus">Based in Bengaluru.</p>
+          </div>
+          <p class="hero-about" data-reveal="focus">Outside work I invest in equities, play chess, read about startups and how businesses are built, and go to the gym. I’m always glad to swap ideas with curious people, and to build something together.</p>
+        </div>
+        <a class="scroll-cue quiet" href="#thoughts" aria-label="Scroll to thoughts" data-reveal="fade"><span></span></a>
+      </section>
+
+      <!-- Thoughts: articles, newest first. Copy a .cell block to add one. -->
+      <section class="block" id="thoughts" aria-labelledby="thoughts-title">
+        <h2 class="block-title" id="thoughts-title" data-reveal="focus">Thoughts</h2>
+        <div class="bento bento--two">
+          <div class="cell" data-reveal>
+            <a class="card card--article" href="posts/five-years.html">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Article · 18 Sep 2026 · 7 min read</p>
+                <h3 class="card-title">Who Learns the Hard Way Now?</h3>
+                <p class="card-text">Layoffs, friends quitting to build, everyone asking AI to explain things like they’re five. Where I think this leaves the people just starting out.</p>
+                <span class="card-cta">Read article <span class="cta-arrow" aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          </div>
+          <div class="cell" data-reveal>
+            <a class="card card--article" href="posts/india-chips.html">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Article · 7 Sep 2026 · 6 min read</p>
+                <h3 class="card-title">India Designs the World’s Chips. So Why Doesn’t It Sell Them?</h3>
+                <p class="card-text">About a fifth of the world’s chip design engineers work in India. So why does India sell so few chips of its own?</p>
+                <span class="card-cta">Read article <span class="cta-arrow" aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          </div>
+          <div class="cell" data-reveal>
+            <a class="card card--article" href="posts/google-deliver.html">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Article · 30 Aug 2026 · 5 min read</p>
+                <h3 class="card-title">So Why Doesn’t Google Deliver?</h3>
+                <p class="card-text">If the food apps lean this heavily on Google Maps, why doesn’t Google just build delivery itself? Writing it out changed my mind.</p>
+                <span class="card-cta">Read article <span class="cta-arrow" aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          </div>
+          <div class="cell" data-reveal>
+            <a class="card card--article" href="posts/i-own-this-because.html">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Article · 12 Aug 2026 · 4 min read</p>
+                <h3 class="card-title">I Own This Because…</h3>
+                <p class="card-text">How I planned to use AI to understand my own stock portfolio better: a one-sentence test, an eight-phase plan, and seven questions.</p>
+                <span class="card-cta">Read article <span class="cta-arrow" aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          </div>
         </div>
       </section>
 
-      <!-- About -->
-      <section class="section grid" id="about" aria-labelledby="about-title">
-        <h2 class="label col-label" id="about-title" data-reveal="fade">About</h2>
-        <p class="about-text col-content" data-reveal>Outside work I invest in equities, play chess, read about startups and how businesses are built, and go to the gym. I’m always glad to swap ideas with curious people, and to build something together.</p>
+      <!-- Side project -->
+      <section class="block" id="project" aria-labelledby="project-title">
+        <h2 class="block-title" id="project-title" data-reveal="focus">Side project</h2>
+        <div class="bento">
+          <div class="cell" data-reveal>
+            <a class="card" href="https://wealthos-cfo.streamlit.app" rel="noopener">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Personal experiment</p>
+                <h3 class="card-title">WealthOS</h3>
+                <p class="card-text">A personal finance tool I started building for myself, to see spending, loans and investments in one place. It imports bank statements and Zerodha holdings, and has an AI assistant that answers questions using your own numbers.</p>
+                <span class="card-cta">Try it out <span class="cta-arrow" aria-hidden="true">↗</span></span>
+              </div>
+            </a>
+          </div>
+        </div>
       </section>
 
-      <!-- Work. Copy an <article class="entry"> block to add an entry. -->
-      <section class="section grid" id="work" aria-labelledby="work-title">
-        <h2 class="label col-label" id="work-title" data-reveal="fade">Work</h2>
-
-        <div class="entries col-content">
-          <article class="entry" data-reveal>
-            <h3 class="entry-title">WealthOS</h3>
-            <p class="entry-meta meta">Personal experiment</p>
-            <p class="entry-summary">A personal finance tool I started building for myself, to see spending, loans and investments in one place. It imports bank statements and Zerodha holdings, and has an AI assistant that answers questions using your own numbers.</p>
-            <ul class="entry-links">
-              <li><a href="https://wealthos-cfo.streamlit.app" rel="noopener">Try it out here<span class="arrow" aria-hidden="true">↗</span></a></li>
-            </ul>
-          </article>
-
-          <article class="entry" data-reveal>
+      <!-- Research -->
+      <section class="block" id="research" aria-labelledby="research-title">
+        <h2 class="block-title" id="research-title" data-reveal="focus">Research</h2>
+        <div class="bento">
+          <div class="cell" data-reveal>
+            <article class="card card--static">
+              <div class="card-body">
             <h3 class="entry-title">Arogya-1.0 patient monitor</h3>
             <p class="entry-meta meta">Research internship · CSIR-CEERI, Pilani · May to July 2023</p>
             <p class="entry-summary">Basic diagnostics for rural areas with no medical facilities at all. That constraint drove the product: portable, battery-operated, and able to run standalone.</p>
@@ -79,89 +147,88 @@
               </div>
               <figcaption class="meta">The research prototype I worked on, not a product I shipped: its mode menu, and the vitals view with no patient connected.</figcaption>
             </figure>
-          </article>
-
-          <article class="entry" data-reveal>
-            <h3 class="entry-title">Approximate computing for ML hardware</h3>
-            <p class="entry-meta meta">Undergraduate research assistant · BITS Pilani · 2024</p>
-            <p class="entry-summary">Circuits that give almost the right answer in exchange for a large saving in power, for machine-learning hardware. I read and analysed the literature, then tried to come up with a design of my own. It didn’t work.</p>
-          </article>
-
+              </div>
+            </article>
+          </div>
+          <div class="cell" data-reveal>
+            <article class="card card--static">
+              <div class="card-body">
+                <h3 class="entry-title">Approximate computing for ML hardware</h3>
+                <p class="entry-meta meta">Undergraduate research assistant · BITS Pilani · 2024</p>
+                <p class="entry-summary">Circuits that give almost the right answer in exchange for a large saving in power, for machine-learning hardware. I read and analysed the literature, then tried to come up with a design of my own. It didn’t work.</p>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
       <!-- Leadership -->
-      <section class="section grid" id="leadership" aria-labelledby="leadership-title">
-        <h2 class="label col-label" id="leadership-title" data-reveal="fade">Leadership</h2>
-
-        <div class="entries col-content">
-          <article class="entry" data-reveal>
-            <h3 class="entry-title">BITS Hyderabad Toastmasters Club</h3>
-            <p class="entry-meta meta">Vice President, Public Relations</p>
-            <p class="entry-summary">The honest reason I took it on: it was the best excuse to network with companies and set up cross-collaborations with their clubs. Mostly so we could visit their fancy offices.</p>
-            <p class="entry-summary">Along the way I won bronze at an area-level speech contest held at ISB in 2023, my third year, up against speakers from Oracle, JPMorgan Chase and Deloitte.</p>
-          </article>
+      <section class="block" id="leadership" aria-labelledby="leadership-title">
+        <h2 class="block-title" id="leadership-title" data-reveal="focus">Leadership</h2>
+        <div class="bento">
+          <div class="cell" data-reveal>
+            <article class="card card--static">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Vice President, Public Relations</p>
+                <h3 class="card-title">BITS Hyderabad Toastmasters Club</h3>
+                <p class="card-text">The honest reason I took it on: it was the best excuse to network with companies and set up cross-collaborations with their clubs. Mostly so we could visit their fancy offices.</p>
+                <p class="card-text">Along the way I won bronze at an area-level speech contest held at ISB in 2023, my third year, up against speakers from Oracle, JPMorgan Chase and Deloitte.</p>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
-      <!-- Thoughts: to add a post, copy one <li class="index-row"> block to the top (newest first),
-           and copy posts/template.html to posts/<slug>.html. -->
-      <section class="section grid" id="thoughts" aria-labelledby="thoughts-title">
-        <h2 class="label col-label" id="thoughts-title" data-reveal="fade">Thoughts</h2>
-
-        <ol class="index col-content">
-          <li class="index-row" data-reveal>
-            <h3 class="index-title"><a class="quiet" href="posts/five-years.html">Who Learns the Hard Way Now?</a></h3>
-            <time class="meta" datetime="2026-09-18">18 Sep 2026</time>
-            <p class="index-summary">Layoffs, friends quitting to build, everyone asking AI to explain things like they’re five. Where I think this leaves the people just starting out.</p>
-          </li>
-          <li class="index-row" data-reveal>
-            <h3 class="index-title"><a class="quiet" href="posts/google-deliver.html">Google Maps Is Behind Every Food Order I Place. So Why Doesn’t Google Deliver?</a></h3>
-            <time class="meta" datetime="2026-08-30">30 Aug 2026</time>
-            <p class="index-summary">If the food apps lean this heavily on Google Maps, why doesn’t Google just build delivery itself? Writing it out changed my mind.</p>
-          </li>
-          <li class="index-row" data-reveal>
-            <h3 class="index-title"><a class="quiet" href="posts/i-own-this-because.html">I Own This Because…</a></h3>
-            <time class="meta" datetime="2026-08-12">12 Aug 2026</time>
-            <p class="index-summary">The eight-phase plan I wrote to make sense of my portfolio with AI, the seven questions at its centre, and where it’s going next.</p>
-          </li>
-        </ol>
+      <!-- Events. Copy a .cell block to add one (newest first). -->
+      <section class="block" id="events" aria-labelledby="events-title">
+        <h2 class="block-title" id="events-title" data-reveal="focus">Rooms I’ve been in</h2>
+        <div class="bento bento--two">
+          <div class="cell" data-reveal>
+            <article class="card card--static">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Event · Apr 2026</p>
+                <h3 class="card-title">YC Startup School Bangalore</h3>
+                <p class="card-text">Got accepted. Met some sharp people and pitched WealthOS to many of them.</p>
+              </div>
+            </article>
+          </div>
+          <div class="cell" data-reveal>
+            <article class="card card--static">
+              <div class="card-body">
+                <p class="card-eyebrow meta">Event · 2024</p>
+                <h3 class="card-title">NVIDIA AI Summit</h3>
+                <p class="card-text">Networked widely, including with a number of VCs.</p>
+              </div>
+            </article>
+          </div>
+        </div>
       </section>
 
-      <!-- Events: copy one <li class="index-row"> block to add one (newest first). -->
-      <section class="section grid" id="events" aria-labelledby="events-title">
-        <h2 class="label col-label" id="events-title" data-reveal="fade">Events</h2>
-
-        <ol class="index col-content">
-          <li class="index-row" data-reveal>
-            <h3 class="index-title">YC Startup School Bangalore</h3>
-            <time class="meta" datetime="2026-04">Apr 2026</time>
-            <p class="index-summary">Got accepted. Met some sharp people and pitched WealthOS to many of them.</p>
-          </li>
-          <li class="index-row" data-reveal>
-            <h3 class="index-title">NVIDIA AI Summit</h3>
-            <time class="meta" datetime="2024">2024</time>
-            <p class="index-summary">Networked widely, including with a number of VCs.</p>
-          </li>
-        </ol>
-      </section>
-
-      <!-- Bored? (chess puzzle) -->
-      <section class="section grid" id="play" aria-labelledby="play-title">
-        <h2 class="label col-label" id="play-title" data-reveal="fade">Bored?</h2>
-
-        <ol class="index col-content">
-          <li class="index-row" data-reveal>
-            <h3 class="index-title"><a class="quiet" href="play/">Mate in Three</a></h3>
-            <p class="index-summary">Try a quick mate-in-three chess puzzle. A new position every time.</p>
-          </li>
-        </ol>
+      <!-- Bored? -->
+      <section class="block" id="bored" aria-labelledby="bored-title">
+        <h2 class="block-title" id="bored-title" data-reveal="focus">Bored?</h2>
+        <div class="bento bento--narrow">
+          <div class="cell" data-reveal>
+            <a class="card card--chess" href="play/">
+              <div class="card-body">
+                <h3 class="card-title">Mate in Three</h3>
+                <p class="card-text">Try a quick mate-in-three chess puzzle. A new position every time.</p>
+                <span class="card-cta">Play <span class="cta-arrow" aria-hidden="true">→</span></span>
+              </div>
+              <div class="mini-board" aria-hidden="true">
+                <span class="pc pc-k-b">♚︎</span>
+                <span class="pc pc-q">♛︎</span>
+                <span class="pc pc-k-w">♚︎</span>
+              </div>
+            </a>
+          </div>
+        </div>
       </section>
 
       <!-- Contact -->
-      <section class="section grid" id="contact" aria-labelledby="contact-title">
-        <h2 class="label col-label" id="contact-title" data-reveal="fade">Contact</h2>
-        <div class="col-content" data-reveal>
+      <section class="block block--contact" id="contact" aria-labelledby="contact-title">
+        <h2 class="block-title" id="contact-title" data-reveal="focus">Contact</h2>
+        <div data-reveal>
           <!-- Personal address only. Keep the work address off this site. -->
           <a class="contact-email" href="mailto:pranayg.bits@gmail.com">pranayg.bits@gmail.com</a>
           <ul class="contact-links">
@@ -173,7 +240,7 @@
 
     <footer class="site-footer label">
       <span>Pranay G</span>
-      <span>© 2026</span>
+      <span>Bengaluru</span>
     </footer>
   </div>
 </body>

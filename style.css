@@ -868,3 +868,334 @@ a:focus-visible .arrow {
   font-style: italic;
   color: var(--text-3);
 }
+
+
+/* ==========================================================================
+   18. Home layout: wider page, cards, sticky header
+   Only applies to <body class="home">. Posts keep the narrow reading column.
+   ========================================================================== */
+
+.home .page {
+  max-width: calc(72rem + 2 * var(--gutter));
+}
+
+/* Sticky header: clear at the top, frosted once you scroll (main.js adds .is-scrolled). */
+.home .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 1.1rem var(--gutter);
+  padding-top: max(1.1rem, env(safe-area-inset-top));
+  border-bottom: var(--hairline) solid transparent;
+  transition: background-color 500ms var(--ease-out-soft),
+    border-color 500ms var(--ease-out-soft),
+    backdrop-filter 500ms var(--ease-out-soft);
+}
+.home .site-header.is-scrolled {
+  background-color: rgba(8, 8, 10, 0.62);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+  border-bottom-color: var(--rule);
+}
+.home .site-header .wordmark {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 500ms var(--ease-out-soft), transform 700ms var(--ease-out-expo);
+}
+.home .site-header.is-scrolled .wordmark { opacity: 1; transform: none; }
+
+@media (max-width: 40rem) {
+  .home .site-header--home { display: flex; }
+  .home .site-nav { gap: var(--s-5); }
+}
+
+/* Hero */
+.home .hero {
+  padding: clamp(4.5rem, 16vh, 9rem) 0 0;
+}
+.hero-about {
+  margin-top: var(--s-5);
+  max-width: 38rem;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* A thin line with a light that travels down it: "there's more below". */
+.scroll-cue {
+  display: block;
+  position: relative;
+  width: 1px;
+  height: 56px;
+  margin-top: clamp(3rem, 8vh, 5rem);
+  overflow: hidden;
+  background: var(--rule);
+  padding: 0;
+}
+.scroll-cue span {
+  position: absolute;
+  left: 0;
+  top: -40%;
+  width: 1px;
+  height: 40%;
+  background: var(--text);
+  animation: cue-fall 2.4s var(--ease-draw) infinite;
+}
+@keyframes cue-fall { to { top: 110%; } }
+
+/* Blocks: a small label, then a large headline, then cards. */
+.block {
+  margin-top: clamp(5.5rem, 3rem + 7vw, 10rem);
+  scroll-margin-top: 5rem;
+}
+.block-head {
+  max-width: 46rem;
+  margin-bottom: clamp(1.75rem, 1rem + 2vw, 3rem);
+}
+.block-title {
+  margin-top: var(--s-3);
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.1rem + 2.8vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.block-title--xl {
+  font-size: clamp(3rem, 1.2rem + 7vw, 7rem);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+/* Bento grids */
+.bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.875rem, 0.5rem + 1vw, 1.25rem);
+}
+.cell { display: flex; min-width: 0; }
+.cell > .card { flex: 1; }
+
+@media (min-width: 52rem) {
+  .bento--thoughts { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+  .bento--thoughts .cell--feature { grid-row: span 2; }
+  .bento--try,
+  .bento--work,
+  .bento--beyond { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cell--wide { grid-column: 1 / -1; }
+}
+
+/* Cards: glass over the starfield, a hairline edge, a soft light that follows
+   the pointer (main.js sets --mx / --my), and a small lift on hover. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.028);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--text);
+  transition: transform 800ms var(--ease-out-expo),
+    border-color 500ms var(--ease-out-soft),
+    background-color 500ms var(--ease-out-soft);
+}
+a.card {
+  background-image: none;
+  padding-bottom: 0;
+}
+a.card:active { opacity: 1; transform: translateY(-1px) scale(0.995); }
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(169, 189, 255, 0.11), transparent 60%);
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out-soft);
+}
+
+@media (hover: hover) {
+  a.card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.17);
+    background-color: rgba(255, 255, 255, 0.045);
+  }
+  a.card:hover::before { opacity: 1; }
+  a.card:hover .card-media img { transform: scale(1.045); }
+  a.card:hover .cta-arrow { transform: translateX(4px); }
+}
+a.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.card-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.cell--feature .card-media { aspect-ratio: 16 / 10; }
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.85) brightness(0.86);
+  transition: transform 1400ms var(--ease-out-expo);
+}
+
+.card-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: clamp(1.35rem, 1rem + 1vw, 2rem);
+}
+.card-eyebrow { margin: 0; }
+.card-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.cell--feature .card-title { font-size: clamp(1.55rem, 1.1rem + 1.5vw, 2.4rem); }
+.card-title--big { font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem); }
+.card-text {
+  color: var(--text-2);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.9rem;
+  font-size: var(--t-meta);
+  font-weight: 500;
+  color: var(--text);
+}
+.cta-arrow {
+  display: inline-block;
+  transition: transform 700ms var(--ease-out-expo);
+}
+
+/* Work cards reuse the entry markup inside a card. */
+.card--static .entry-summary,
+.card--static .entry-points { max-width: none; }
+.card--static .entry-figure { margin-top: var(--s-6); }
+
+/* Chess card: text on the left, a tiny board on the right. On hover the
+   queen slides to deliver mate. */
+.card--chess { flex-direction: row; align-items: center; }
+.mini-board {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(120px, 9rem + 2vw, 176px);
+  aspect-ratio: 1;
+  margin: clamp(1.35rem, 1rem + 1vw, 2rem);
+  margin-left: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* 8 by 8 squares: each 25% tile holds a 2 by 2 checker. */
+  background: repeating-conic-gradient(rgba(255, 255, 255, 0.1) 0 25%, rgba(255, 255, 255, 0.025) 0 50%) 0 0 / 25% 25%;
+}
+.pc {
+  position: absolute;
+  width: 12.5%;
+  height: 12.5%;
+  display: grid;
+  place-items: center;
+  font-family: "Apple Symbols", "Segoe UI Symbol", "Noto Sans Symbols 2", "DejaVu Sans", serif;
+  font-size: clamp(14px, 1rem + 0.3vw, 21px);
+  line-height: 1;
+  color: #f5f5f7;
+  transition: transform 1100ms var(--ease-out-expo);
+}
+.pc-k-b { left: 87.5%; top: 0; color: #6a6a72; }
+.pc-k-w { left: 62.5%; top: 25%; }
+.pc-q   { left: 37.5%; top: 50%; color: var(--accent); }
+@media (hover: hover) {
+  .card--chess:hover .pc-q { transform: translate(300%, -300%); }
+}
+@media (max-width: 30rem) {
+  .card--chess { flex-direction: column; align-items: stretch; }
+  .mini-board { margin: 0 clamp(1.35rem, 1rem + 1vw, 2rem) clamp(1.35rem, 1rem + 1vw, 2rem); }
+}
+
+/* Contact */
+.block--contact { padding-bottom: var(--s-6); }
+.block--contact .block-title { margin-bottom: var(--s-6); }
+
+/* Reading progress on posts (main.js adds the element). */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* "More thoughts" at the end of each post */
+.more-thoughts { margin-top: var(--s-6); }
+.more-thoughts ul { list-style: none; padding: 0; margin: var(--s-4) 0 0; display: grid; gap: var(--s-4); }
+.more-thoughts a { font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; letter-spacing: -0.015em; }
+.more-thoughts .meta { display: block; margin-top: 0.15rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue span { animation: none; top: 30%; }
+  .card, .card::before, .card-media img, .cta-arrow, .pc,
+  .home .site-header, .home .site-header .wordmark { transition: none; }
+  .card--chess:hover .pc-q, a.card:hover { transform: none; }
+}
+.back-home { margin-top: var(--s-7); }
+
+/* Wide screens: role on the left, the About line on the right, so the
+   first cards peek into the first screen. */
+@media (min-width: 64rem) {
+  .home .hero { padding-top: clamp(4rem, 12vh, 7rem); }
+  .home .hero-lines {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--s-8);
+    align-items: end;
+  }
+  .home .hero-about { margin-top: 0; }
+  .home .scroll-cue { margin-top: var(--s-7); height: 44px; }
+  .home #thoughts { margin-top: var(--s-8); }
+}
+
+@media (max-width: 63.99rem) {
+  .home .hero { padding-top: clamp(3rem, 9vh, 6rem); }
+  .home .scroll-cue { margin-top: var(--s-6); height: 40px; }
+  .home #thoughts { margin-top: var(--s-8); }
+}
+
+/* Grids for the plain-titled sections */
+.block > .block-title { margin-top: 0; margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.5rem); }
+@media (min-width: 52rem) {
+  .bento--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bento--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bento--narrow { max-width: 40rem; }
+}
+.card--article .card-title { font-size: clamp(1.3rem, 1.05rem + 0.7vw, 1.6rem); }

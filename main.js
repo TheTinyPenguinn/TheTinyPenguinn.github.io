@@ -611,3 +611,58 @@ window.__siteReady = true;
 initStarfield();
 initReveal();
 initReadingTime();
+
+/* --------------------------------------------------------------------------
+   HOME: sticky header frosts after a little scroll; cards get a soft light
+   that follows the pointer. POSTS: a thin reading-progress line.
+   -------------------------------------------------------------------------- */
+function initHeader() {
+  const header = document.querySelector("[data-header]");
+  if (!header) return;
+  let ticking = false;
+  const update = () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 24);
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
+}
+
+function initCardLight() {
+  if (!window.matchMedia("(hover: hover)").matches) return;
+  document.querySelectorAll("a.card").forEach((card) => {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+      card.style.setProperty("--my", (e.clientY - r.top) + "px");
+    });
+  });
+}
+
+function initProgress() {
+  const prose = document.querySelector(".prose");
+  if (!prose) return;
+  const bar = document.createElement("div");
+  bar.className = "read-progress";
+  bar.setAttribute("aria-hidden", "true");
+  document.body.appendChild(bar);
+  let ticking = false;
+  const update = () => {
+    const r = prose.getBoundingClientRect();
+    const total = r.height - window.innerHeight * 0.6;
+    const done = Math.min(1, Math.max(0, -r.top / Math.max(total, 1)));
+    bar.style.transform = "scaleX(" + done.toFixed(4) + ")";
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
+  update();
+}
+
+initHeader();
+initCardLight();
+initProgress();
