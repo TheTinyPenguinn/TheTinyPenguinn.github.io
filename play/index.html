@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Mate in Three · Pranay G</title>
-  <meta name="description" content="A forced mate in three, and a different one every time you open it. You play White; the defence answers with its stiffest reply. Every position is proved correct before you see it.">
+  <meta name="description" content="A quick chess puzzle: checkmate Black in three moves. A new position every visit.">
   <meta name="theme-color" content="#08080a">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mate in Three">
@@ -30,8 +30,8 @@
     <main class="game">
       <h1 class="title">Mate in Three</h1>
       <p class="rule" id="rule">
-        You are White, and mate is forced in three. Black plays its stiffest
-        defence: one road in, no way around. A new position every visit.
+        You play White. Find a way to checkmate Black in three moves.
+        Black will defend as well as it can. A new position every visit.
       </p>
       <p class="visually-hidden" id="board-help">
         Tap or click one of your pieces, then tap the square to move it to.
@@ -72,7 +72,7 @@
         <div class="controls">
           <button type="button" data-undo>Undo</button>
           <button type="button" data-reset>Reset</button>
-          <button type="button" data-line>Show the line</button>
+          <button type="button" data-line>Show solution</button>
           <button type="button" class="primary" data-next>New puzzle</button>
         </div>
 
@@ -91,15 +91,13 @@
             <dt>Keyboard</dt>
             <dd>Arrow keys to move about the board, <kbd>Enter</kbd> to pick up
               and put down. <kbd>U</kbd> takes a move back, <kbd>R</kbd> starts
-              the position again, <kbd>L</kbd> shows the line, <kbd>N</kbd>
+              the position again, <kbd>L</kbd> shows the solution, <kbd>N</kbd>
               brings up a new one.</dd>
             <dt>Getting it wrong</dt>
-            <dd>A move that lets Black wriggle out is allowed. You will be
-              told, and you can take it back. Run out of moves and you can be
-              shown the line.</dd>
+            <dd>If a move lets Black escape, you will be told and can take it
+              back. Stuck? Tap “Show the line” to see the solution.</dd>
             <dt>The defence</dt>
-            <dd>Black picks the reply that puts mate off longest, every time.
-              It is not guessing, and it will not help you.</dd>
+            <dd>Black always picks the move that delays checkmate the longest.</dd>
             <dt>Where these come from</dt>
             <dd>A hundred and fifty are built in, and more are worked out in the
               background as you play. None of them reaches the board until a

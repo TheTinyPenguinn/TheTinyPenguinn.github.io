@@ -681,13 +681,13 @@ function playWhite(m) {
   }
   if (pos.isStalemate()) {
     game.over = true;
-    ui.onFailed("That is stalemate, not mate: a draw.");
+    ui.onFailed("Stalemate: Black has no legal moves but isn’t in check, so it’s a draw.");
     requestDraw();
     return;
   }
   if (game.used >= MOVES_ALLOWED) {
     game.over = true;
-    ui.onFailed("Three moves gone and the king is still there.");
+    ui.onFailed("That was your third move, and it isn’t checkmate.");
     requestDraw();
     return;
   }
@@ -899,7 +899,7 @@ function press(sq) {
     ui.onPick(sq, piece);
   } else {
     deselect();
-    if (piece > 0) ui.nudge("That is one of Black's pieces.");
+    if (piece > 0) ui.nudge("That’s one of Black’s pieces. You play White.");
   }
   requestDraw();
 }
@@ -988,13 +988,29 @@ const ui = (function () {
 
   function pieceWord(piece) { return PIECE_WORDS[piece & 7]; }
 
+  /* Turn chess notation ("Qxg7+") into plain words ("queen takes on g7, check"). */
+  const SAN_PIECES = { K: "king", Q: "queen", R: "rook", B: "bishop", N: "knight" };
+  function words(san) {
+    if (!san) return "";
+    const s = String(san);
+    const tail = s.indexOf("#") >= 0 ? ", checkmate" : (s.indexOf("+") >= 0 ? ", check" : "");
+    if (s.indexOf("O-O-O") === 0) return "castles long" + tail;
+    if (s.indexOf("O-O") === 0) return "castles short" + tail;
+    const piece = SAN_PIECES[s[0]] || "pawn";
+    const squares = s.match(/[a-h][1-8]/g) || [];
+    const to = squares[squares.length - 1] || "";
+    const promo = s.match(/=([QRBN])/);
+    let out = piece + (s.indexOf("x") >= 0 ? " takes on " : " to ") + to;
+    if (promo) out += " and becomes a " + SAN_PIECES[promo[1]];
+    return out + tail;
+  }
+
   function format(line) {
-    let out = "";
+    const parts = [];
     for (let i = 0; i < line.length; i++) {
-      if (i % 2 === 0) out += (i ? "  " : "") + (i / 2 + 1) + ". ";
-      out += line[i].san + (i % 2 === 0 ? " " : "");
+      parts.push((i % 2 === 0 ? "You: " : "Black: ") + words(line[i].san) + ".");
     }
-    return out.trim();
+    return parts.join(" ");
   }
 
   function fetchNext(preferFresh) {
@@ -1046,17 +1062,17 @@ const ui = (function () {
     onWhiteMove: function (san) {
       tally();
       say("");
-      announce("You played " + san + ". Black to answer.");
+      announce("You played " + words(san) + ". Black to answer.");
     },
 
     onBlackMove: function (san, distance) {
       tally();
       if (distance === 0) {
-        say("Black is out of the net after " + san + ". Undo and try again?", "nudge", true);
-        announce("Black replied " + san + ". The forced mate has gone.");
+        say("Black escaped with " + words(san) + ". Undo and try again?", "nudge", true);
+        announce("Black replied " + words(san) + ". The forced mate has gone.");
       } else {
         say("");
-        announce("Black replied " + san + ". " + movesLeft() +
+        announce("Black replied " + words(san) + ". " + movesLeft() +
           (movesLeft() === 1 ? " move left." : " moves left."));
       }
     },
@@ -1067,8 +1083,8 @@ const ui = (function () {
       if (streak > best) best = streak;
       save();
       tally();
-      const text = streak > 1 ? "Mate. " + san + ". " + streak + " in a row."
-        : "Mate. " + san;
+      const text = streak > 1 ? "Checkmate with " + words(san) + ". " + streak + " in a row."
+        : "Checkmate with " + words(san) + ".";
       say(text, "solved", true);
       announce(text + " Press N for a new one.");
       if (fromKeyboard) nextBtn.focus();
@@ -1078,7 +1094,7 @@ const ui = (function () {
       streak = 0;
       save();
       tally();
-      say(why + " Undo, show the line, or take a new one.", "nudge", true);
+      say(why + " Undo, see the solution, or try a new one.", "nudge", true);
       announce(why);
     },
 
@@ -1094,21 +1110,21 @@ const ui = (function () {
       tally();
       lineOut.hidden = false;
       lineOut.textContent = format(line);
-      say("Watch the line.", "nudge", true);
-      announce("The line is " + format(line));
+      say("Here’s the solution.", "nudge", true);
+      announce("The solution: " + format(line));
     },
 
     onLineDone: function () {
       tally();
-      say("That is the line. Take a new position when you are ready.", "nudge", true);
+      say("That’s the solution. Try a new one when you’re ready.", "nudge", true);
     },
 
     nudge: function (text) { say(text, "nudge"); announce(text); },
 
     nudgeOver: function () {
       if (game.replay) return;
-      if (game.solved) say("Mate already. New puzzle?", "solved", true);
-      else say("Out of moves. Show the line, or take a new one.", "nudge", true);
+      if (game.solved) say("Already checkmate. New puzzle?", "solved", true);
+      else say("Out of moves. See the solution, or try a new one.", "nudge", true);
     },
 
     announceSquare: function (sq) {
